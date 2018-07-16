@@ -1,0 +1,20 @@
+resources:
+- name: testgit-pipelines
+  type: git
+  source:
+    uri: git@github.com:pivotal-jleung/testgit-pipelines.git
+    branch: master
+    private_key: {{git_private_key}}
+
+jobs:
+- name: deployed-products
+  serial: true
+  plan:
+  - task: deployed-products
+    file: testgit-pipelines/tasks/deployed-products/task.yml
+    params:
+      OPSMAN_CLIENT_ID: {{opsman_client_id}}
+      OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
+      OPSMAN_USERNAME: {{opsman_admin_username}}
+      OPSMAN_PASSWORD: {{opsman_admin_password}}
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
