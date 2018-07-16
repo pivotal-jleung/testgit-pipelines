@@ -5,11 +5,23 @@ resources:
     uri: git@github.com:pivotal-jleung/testgit-pipelines.git
     branch: master
     private_key: {{git_private_key}}
+- name: schedule
+  type: time
+  source:
+    interval: 30m
+    start: "12:00 AM"
+    stop: "11:59 PM"
+    location: America/Los_Angeles
+    days: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
 
 jobs:
 - name: deployed-products
   serial: true
   plan:
+  - aggregate:
+    - get: testgit-pipelines
+    - get: schedule
+      trigger: true
   - task: deployed-products
     file: testgit-pipelines/tasks/deployed-products/task.yml
     params:
